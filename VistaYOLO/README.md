@@ -1,44 +1,103 @@
-# my-learner-record
+脑肿瘤智能检测可视化系统
 
-#我的学习记录
-VistaYOLO 
-基于 YOLOv8 的目标检测项目
+项目介绍
 
-项目简介
-这是一个使用 Ultralytics YOLOv8 模型实现的图像目标检测项目，可快速加载预训练模型，对输入图片进行目标识别，并自动保存带检测框的结果图片。
- 
-功能特性
-- 支持单张图片目标检测
-- 自动保存检测结果到指定路径
-- 基于 YOLOv8n 轻量模型，推理速度快
-- 代码结构清晰，便于二次开发与扩展
- 
-安装依赖
+基于 YOLOv8 与 PySide6 开发的脑肿瘤医学影像智能检测工具，支持原图 / 结果图实时对比、检测框自定义、局部放大查看、数据统计与导出，适用于脑肿瘤 MRI 影像的快速标注与辅助诊断。
+
+功能清单
+
+核心功能
+
+✅ 脑肿瘤目标自动检测（仅框选病变区域，不冗余标注）
+
+✅ 左右分屏对比显示：左侧检测前原图 + 右侧检测后标注图
+
+✅ 检测框样式自定义：方形 / 圆形切换、大小缩放、颜色切换
+
+✅ 图片滚轮局部放大 + 右下角缩略图定位（已移除放大镜图标）
+
+✅ 右侧实时统计面板：模型信息、检测数量、类别分布、置信度范围
+
+✅ 支持单张图片、批量图片、视频检测
+
+✅ 标注图保存 + 检测结果 JSON/CSV 导出
+
+界面样式
+
+暖杏色主题 + 纯黑字体
+浅紫圆角按钮，布局清爽无重叠
+中间面板最大化展示
+
+检测前 / 检测后标题放大加粗 + 粗花环线框包裹
+
+左右区域可随缩放移动的虚线分隔
+
+
+
+环境依赖
+txt
+
+Python 3.8+
+
+ultralytics >= 8.0
+
+PySide6
+
+opencv-python
+
+numpy
+
+一键安装：
+
 bash
-pip install -r requirements.txt
 
-快速开始
-1. 将待检测图片放入项目目录
-2. 在代码中调用检测函数：
+运行
+
+pip install ultralytics pyside6 opencv-python numpy
+
+模型使用说明
+
+训练模型（已提供脚本）
+
+运行 train_brain_tumor.py 自动下载数据集并训练：
+
 python
-from utils import detect_image
-# 传入图片路径，可自定义结果保存路径
-detect_image("test.jpg", save_path="results/result.jpg") 
-3. 运行后，检测结果将保存在  results/  文件夹中 
-![程序面预览](gui_preview.png)
-项目结构
-plaintext
-  
-VistaYOLO/
-├── main.py          # 主程序入口
-├── utils.py         # 核心检测函数实现
-├── requirements.txt # 项目依赖列表
-├── yolov8n.pt       # YOLOv8 预训练模型文件
-├── README.md        # 项目说明文档
-└── results/         # 检测结果保存目录
-    └── result.jpg   # 示例检测结果 
- 
-依赖说明
--  ultralytics : YOLOv8 官方库
--  opencv-python : 用于图片读写与可视化
-- 其他依赖见  requirements.txt 
+
+运行
+
+from ultralytics import YOLO
+
+model = YOLO("yolov8n.pt")
+
+model.train(data="brain-tumor.yaml", epochs=30, imgsz=640, device="cpu")
+
+模型路径
+
+训练完成后模型位于：
+
+runs/detect/train/weights/best.pt
+
+加载模型
+
+软件内点击 加载模型权重 → 选择 best.pt 即可使用。
+
+文件结构 plaintext
+
+brain-tumor-detector/
+
+├── main.py                # 主程序（完整GUI）
+
+├── train_brain_tumor.py   # 模型训练脚本
+
+├── best.pt                # 训练好的脑肿瘤权重
+
+├── README.md              # 说明文档
+
+└── runs/                  # 训练输出目录
+
+注意事项
+
+模型需先训练或使用提供的权重，不可直接运行空模型
+支持格式：jpg /jpeg/png /bmp/mp4 /avi
+放大查看时缩略图会自动标记当前视野区域
+检测结果默认保存置信度 ≥ 0.25 的目标
