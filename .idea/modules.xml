@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/my-learner-record.iml" filepath="$PROJECT_DIR$/.idea/my-learner-record.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PI-MAPP.iml" filepath="$PROJECT_DIR$/.idea/PI-MAPP.iml" />
     </modules>
   </component>
 </project>
